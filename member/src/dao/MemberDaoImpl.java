@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
- 
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
@@ -15,12 +15,13 @@ import javax.sql.DataSource;
 import bean.MemberBean;
 import util.DBmanager;
 
-public class MemberDAO {
+public class MemberDaoImpl implements CommonDao{
+	
 	Connection conn = null;
     PreparedStatement pstmt = null;
     Statement stmt = null;
     ResultSet rs = null;
-  
+    String sql = "";
     MemberBean bean = new MemberBean();
     /*
      * 지금 보시는 내용이 싱글톤 + DBCP 정석입니다. 
@@ -29,14 +30,14 @@ public class MemberDAO {
      * DBmanager 를 만들었고 당분간은 DBmanager 를 
      사용하다가 프로젝트가 완성되면 철거하는 방식으로 하겠습니다.
      */
-    private static MemberDAO memberDAO = new MemberDAO();
+    private static MemberDaoImpl memberDAO = new MemberDaoImpl();
  
-    private MemberDAO() {
+    private MemberDaoImpl() {
         // 단위 테스트가 끝나고 프로젝트가 완성되면 걷어 낼 부분
         conn = DBmanager.getConnection();
     }
  
-    public static MemberDAO getInstance() {
+    public static MemberDaoImpl getInstance() {
         return memberDAO;
     }
  
@@ -50,8 +51,10 @@ public class MemberDAO {
         conn = ds.getConnection();
         return conn;
     }
-    public int join(MemberBean bean){
-        int result = 0;
+
+	@Override
+	public int insert(Object obj) {
+		int result = 0;
         String sql 
             = "insert into member(MEMBERID,PASSWORD,NAME,EMAIL,AGE)"
                 +" values( ? , ? , ? , ? , ? )";
@@ -63,21 +66,39 @@ public class MemberDAO {
             pstmt.setString(3, bean.getName());
             pstmt.setString(4, bean.getEmail());
             pstmt.setString(5, bean.getAge());
-            
-            result = pstmt.executeUpdate();//execute()는 안쓰고 executeUpdate()와 executeQuery()만 쓰는데.... select 쿼리 나머지는 업데이트
+            result = pstmt.executeUpdate();
         }catch(Exception ex){
             ex.printStackTrace();
             System.out.println("MemberDAO 에서 에러가 발생 !!");
         }
-        System.out.println(result);
         return result;
-    }
-    
-    public List<MemberBean> getList() {
-        List<MemberBean> list = new ArrayList<MemberBean>();
+	}
+
+	@Override
+	public int count() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Object getElementById(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Object> getElementsByName(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Object> list() {
+		List<Object> list = new ArrayList<Object>();
         try {
             stmt = conn.createStatement();
-            rs = stmt.executeQuery("select * from member");
+            sql = "select * from member";
+            rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 bean.setId(rs.getString("MEMBERID"));
                 bean.setAge(rs.getString("AGE"));
@@ -88,7 +109,6 @@ public class MemberDAO {
                 list.add(bean);
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
  
@@ -97,14 +117,25 @@ public class MemberDAO {
                 stmt.close();
                 conn.close();
             } catch (SQLException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
  
         }
         return list;
+	}
+
+	@Override
+	public int update(Object obj) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int delete(String id) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
  
-    }
- 
+   
     
 }

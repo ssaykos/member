@@ -8,10 +8,9 @@ import java.util.Properties;
 
 import bean.MemberBean;
 import oracle.jdbc.OracleDriver;
- 
+
 public class JdbcTest {
-    
-    
+
     public static void main(String[] args) {
         Connection conn = null;
         Statement stmt = null;
@@ -48,7 +47,6 @@ public class JdbcTest {
                 System.out.println();
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }finally{
             
@@ -57,7 +55,6 @@ public class JdbcTest {
                 stmt.close();
                 conn.close();
             } catch (SQLException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             

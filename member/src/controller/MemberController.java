@@ -1,4 +1,5 @@
 package controller;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,24 +16,16 @@ import javax.servlet.http.HttpServletResponse;
 import bean.MemberBean;
 import service.MemberService;
 import service.MemberServiceImpl;
- 
 
- 
-/**
- * @ Date : 2015.06;
- * @ Author : itb-1;
- * @ Story : 회원관리 컨트롤러;
- */
-@WebServlet({"/model2/join.do","/model2/login.do",
+@WebServlet({"/member/join.do","/member/login.do",
     "/member/searchIdForm.do","/member/searchPassForm.do",
     "/member/searchAllMembers.do"})
 public class MemberController extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+private static final long serialVersionUID = 1L;
     
     Map<String,Object> map = new HashMap<String,Object>();
     MemberBean bean = new MemberBean();
     MemberService service = MemberServiceImpl.getInstance();
-    
    
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -50,9 +43,7 @@ public class MemberController extends HttpServlet {
             dispatcher4.forward(request, response);
             break;
         case "/member/searchAllMembers.do": 
-            List<MemberBean> list = new ArrayList<MemberBean>();
-            list = service.getList();
-            request.setAttribute("memberList", list);
+            request.setAttribute("memberList", service.memberList());
             RequestDispatcher dispatcher5 
                 = request.getRequestDispatcher("/view/memberList.jsp");
             dispatcher5.forward(request, response);
@@ -67,30 +58,24 @@ public class MemberController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String path = request.getServletPath();
         switch (path) {
-        case "/model2/join.do" : 
+        case "/member/join.do" : 
             String name = request.getParameter("name");
             String id = request.getParameter("id");
             String password = request.getParameter("password");
             String age = request.getParameter("age");
             String email = request.getParameter("email");
-            System.out.println(name);
-            System.out.println(id);
-            System.out.println(password);
-            System.out.println(age);
-            System.out.println(email);
             bean.setName(name);
-            bean.setEmail(email);
             bean.setId(id);
             bean.setPassword(password);
             bean.setAge(age);
+            bean.setEmail(email);
             
             service.join(bean);
             RequestDispatcher dispatcher 
-                = request.getRequestDispatcher("/view/Main.jsp");
+                = request.getRequestDispatcher("/view/main.jsp");
             dispatcher.forward(request, response);
             break;
-        case "/model2/login.do" : 
-            
+        case "/member/login.do" : 
             String id2 = request.getParameter("id");
             String pass = request.getParameter("password");
             String msg = service.login(id2, pass);
@@ -103,7 +88,7 @@ public class MemberController extends HttpServlet {
                 request.setAttribute("age", bean.getAge());
                 request.setAttribute("address", bean.getAddr());
                 RequestDispatcher dispatcher2 
-                    = request.getRequestDispatcher("/view/LoginForm.jsp");
+                    = request.getRequestDispatcher("/view/member.jsp");
                 dispatcher2.forward(request, response);
                 break;
             }else{
@@ -118,5 +103,5 @@ public class MemberController extends HttpServlet {
         default: break;
         }
     }
+
 }
- 

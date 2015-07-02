@@ -2,11 +2,13 @@ package bean;
 
 public class MemberBean {
 	private String name; // 이름
-	private String addr; // 주소
-	private String age; // 나이
-	private String id; // ID
-	private String password; // 비번
-	private String email; // 이메일
+    private String addr; // 주소
+    private String age; // 나이
+    private String id; // ID
+    private String password; // 비번
+    private String email; // 이메일
+    
+    
 	public String getName() {
 		return name;
 	}
@@ -43,8 +45,7 @@ public class MemberBean {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-	/*
-	 * getter/setter 생략
-	 */
+    
+    
+    
 }

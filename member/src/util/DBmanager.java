@@ -2,10 +2,9 @@ package util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
- 
- 
+
 public class DBmanager {
-    public static Connection getConnection(){
+	public static Connection getConnection(){
         Connection conn = null;
         try{
             Class.forName("oracle.jdbc.OracleDriver");
